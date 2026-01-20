@@ -1634,3 +1634,282 @@ kbd {
     justify-content: center;
   }
 }
+
+/* ============================================================================
+   TIME PICKER STYLES - Alarm-style scrollable wheels
+   ============================================================================ */
+
+.time-picker {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: var(--bg-secondary);
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  width: fit-content;
+}
+
+.time-picker-wheel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.time-picker-label {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  margin-bottom: var(--space-xs);
+  text-transform: uppercase;
+}
+
+.time-picker-select {
+  width: 70px;
+  padding: var(--space-md);
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  font-family: inherit;
+  text-align: center;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: all var(--transition-fast);
+}
+
+.time-picker-select:hover {
+  border-color: var(--accent-primary);
+}
+
+.time-picker-select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.time-picker-separator {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 0 var(--space-xs);
+  margin-top: var(--space-lg);
+}
+
+/* ============================================================================
+   QUESTION TYPE DROPDOWN
+   ============================================================================ */
+
+.question-type-select {
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-xs);
+  font-family: inherit;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  min-width: 100px;
+}
+
+.question-type-select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
+/* ============================================================================
+   MCQ OPTIONS - A, B, C, D buttons
+   ============================================================================ */
+
+.answer-input-section {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: var(--space-lg);
+}
+
+.mcq-options {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-md);
+}
+
+.mcq-option {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  background: var(--bg-card);
+  border: 3px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: inherit;
+}
+
+.mcq-option:hover:not(:disabled) {
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.mcq-option.selected {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: white;
+  box-shadow: var(--shadow-glow);
+}
+
+.mcq-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mcq-option-letter {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+}
+
+.mcq-option kbd {
+  font-size: var(--font-size-xs);
+  opacity: 0.6;
+  margin: 0;
+}
+
+/* ============================================================================
+   NUMERICAL INPUT
+   ============================================================================ */
+
+.numerical-input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.numerical-input {
+  width: 100%;
+  max-width: 300px;
+  padding: var(--space-lg);
+  font-size: var(--font-size-xl);
+  font-family: inherit;
+  text-align: center;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 3px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+}
+
+.numerical-input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+}
+
+.numerical-input::placeholder {
+  color: var(--text-muted);
+}
+
+.numerical-input:disabled {
+  opacity: 0.5;
+}
+
+.numerical-hint {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+
+/* ============================================================================
+   SELECTED ANSWER DISPLAY
+   ============================================================================ */
+
+.selected-answer-display {
+  text-align: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--success-bg);
+  border-radius: var(--radius-md);
+  color: var(--success);
+  font-size: var(--font-size-sm);
+}
+
+.answer-btn-done.has-answer {
+  background: var(--success);
+  border-color: var(--success);
+}
+
+.answer-btn-done.has-answer:hover:not(:disabled) {
+  background: var(--success);
+  border-color: var(--success);
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+}
+
+/* ============================================================================
+   TYPE BADGES
+   ============================================================================ */
+
+.type-badge {
+  display: inline-block;
+  padding: var(--space-xs) var(--space-sm);
+  margin-left: var(--space-sm);
+  background: var(--info-bg);
+  color: var(--info);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+}
+
+/* ============================================================================
+   USER ANSWER IN REVIEW
+   ============================================================================ */
+
+.review-user-answer {
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--bg-glass);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.review-user-answer strong {
+  color: var(--accent-primary);
+}
+
+/* Mobile responsiveness for new components */
+@media (max-width: 480px) {
+  .time-picker {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .time-picker-select {
+    width: 60px;
+    padding: var(--space-sm);
+    font-size: var(--font-size-lg);
+  }
+
+  .mcq-option {
+    width: 60px;
+    height: 60px;
+  }
+
+  .mcq-option-letter {
+    font-size: var(--font-size-lg);
+  }
+
+  .numerical-input {
+    padding: var(--space-md);
+    font-size: var(--font-size-lg);
+  }
+
+  .question-type-select {
+    min-width: 80px;
+    font-size: 10px;
+  }
+}

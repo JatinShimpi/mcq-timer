@@ -121,6 +121,91 @@ function importData(file, callback) {
   reader.readAsText(file);
 }
 
+// Convert seconds to HH:MM:SS object
+function secondsToHMS(totalSeconds) {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return { hours, minutes, seconds };
+}
+
+// Convert HH:MM:SS object to seconds
+function hmsToSeconds({ hours, minutes, seconds }) {
+  return (hours * 3600) + (minutes * 60) + seconds;
+}
+
+// ============================================================================
+// TIME PICKER COMPONENT - Scrollable wheels (alarm-style)
+// ============================================================================
+
+function TimePicker({ value, onChange, showHours = true }) {
+  const hms = secondsToHMS(value);
+
+  const handleChange = (field, newValue) => {
+    const updated = { ...hms, [field]: parseInt(newValue) || 0 };
+    onChange(hmsToSeconds(updated));
+  };
+
+  const hours = Array.from({ length: 24 }, (_, i) => i);
+  const minutesSeconds = Array.from({ length: 60 }, (_, i) => i);
+
+  return (
+    <div className="time-picker">
+      {showHours && (
+        <>
+          <div className="time-picker-wheel">
+            <label className="time-picker-label">H</label>
+            <select
+              className="time-picker-select"
+              value={hms.hours}
+              onChange={(e) => handleChange('hours', e.target.value)}
+            >
+              {hours.map(h => (
+                <option key={h} value={h}>{h.toString().padStart(2, '0')}</option>
+              ))}
+            </select>
+          </div>
+          <span className="time-picker-separator">:</span>
+        </>
+      )}
+      <div className="time-picker-wheel">
+        <label className="time-picker-label">M</label>
+        <select
+          className="time-picker-select"
+          value={hms.minutes}
+          onChange={(e) => handleChange('minutes', e.target.value)}
+        >
+          {minutesSeconds.map(m => (
+            <option key={m} value={m}>{m.toString().padStart(2, '0')}</option>
+          ))}
+        </select>
+      </div>
+      <span className="time-picker-separator">:</span>
+      <div className="time-picker-wheel">
+        <label className="time-picker-label">S</label>
+        <select
+          className="time-picker-select"
+          value={hms.seconds}
+          onChange={(e) => handleChange('seconds', e.target.value)}
+        >
+          {minutesSeconds.map(s => (
+            <option key={s} value={s}>{s.toString().padStart(2, '0')}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
+}
+
+// Question type constants
+const QUESTION_TYPES = [
+  { value: 'mcq-single', label: 'MCQ Single', desc: 'Select one option' },
+  { value: 'mcq-multi', label: 'MCQ Multi', desc: 'Select multiple options' },
+  { value: 'numerical', label: 'Numerical', desc: 'Enter a number/text' }
+];
+
+const DEFAULT_OPTIONS = ['A', 'B', 'C', 'D'];
+
 // Calculate analytics from sessions
 function calculateAnalytics(sessions) {
   const topicStats = {};
@@ -634,7 +719,9 @@ function SessionEditor({ session, onSave, onCancel, onStart }) {
     const newQuestion = {
       id: generateId(),
       identifier: `Q${editSession.questions.length + 1}`,
-      time: editSession.timePerQuestion
+      time: editSession.timePerQuestion,
+      type: 'mcq-single', // default type
+      options: [...DEFAULT_OPTIONS]
     };
     setEditSession(prev => ({
       ...prev,
@@ -650,7 +737,9 @@ function SessionEditor({ session, onSave, onCancel, onStart }) {
       const newQuestions = Array.from({ length: count }, (_, i) => ({
         id: generateId(),
         identifier: `Q${currentLength + i + 1}`,
-        time: editSession.timePerQuestion
+        time: editSession.timePerQuestion,
+        type: 'mcq-single',
+        options: [...DEFAULT_OPTIONS]
       }));
       setEditSession(prev => ({
         ...prev,
@@ -776,40 +865,32 @@ function SessionEditor({ session, onSave, onCancel, onStart }) {
 
       {editSession.timerMode === 'uniform' && (
         <div className="form-group">
-          <TextField>
-            <Label className="form-label">Time per Question (seconds)</Label>
-            <Input
-              className="form-input"
-              type="number"
-              min="10"
-              max="600"
-              value={editSession.timePerQuestion}
-              onChange={(e) => setEditSession(prev => ({
-                ...prev,
-                timePerQuestion: parseInt(e.target.value) || 60
-              }))}
-            />
-          </TextField>
+          <label className="form-label">Time per Question</label>
+          <TimePicker
+            value={editSession.timePerQuestion}
+            onChange={(seconds) => setEditSession(prev => ({
+              ...prev,
+              timePerQuestion: Math.max(10, seconds)
+            }))}
+            showHours={false}
+          />
+          <p className="form-hint">{formatDuration(editSession.timePerQuestion)}</p>
         </div>
       )}
 
       {editSession.timerMode === 'total' && (
         <div className="form-group">
-          <TextField>
-            <Label className="form-label">Total Time (seconds)</Label>
-            <Input
-              className="form-input"
-              type="number"
-              min="60"
-              value={editSession.totalTime}
-              onChange={(e) => setEditSession(prev => ({
-                ...prev,
-                totalTime: parseInt(e.target.value) || 600
-              }))}
-            />
-          </TextField>
+          <label className="form-label">Total Time</label>
+          <TimePicker
+            value={editSession.totalTime}
+            onChange={(seconds) => setEditSession(prev => ({
+              ...prev,
+              totalTime: Math.max(60, seconds)
+            }))}
+            showHours={true}
+          />
           <p className="form-hint">
-            ≈ {formatDuration(Math.floor(editSession.totalTime / Math.max(1, editSession.questions.length)))} per question
+            {formatDuration(editSession.totalTime)} total • ≈ {formatDuration(Math.floor(editSession.totalTime / Math.max(1, editSession.questions.length)))} per question
           </p>
         </div>
       )}
@@ -846,12 +927,22 @@ function SessionEditor({ session, onSave, onCancel, onStart }) {
                 value={question.identifier}
                 onChange={(e) => handleUpdateQuestion(question.id, 'identifier', e.target.value)}
               />
+              <select
+                className="question-type-select"
+                value={question.type || 'mcq-single'}
+                onChange={(e) => handleUpdateQuestion(question.id, 'type', e.target.value)}
+                title="Question type"
+              >
+                {QUESTION_TYPES.map(t => (
+                  <option key={t.value} value={t.value}>{t.label}</option>
+                ))}
+              </select>
               {editSession.timerMode === 'individual' && (
                 <input
                   type="number"
                   className="question-time"
                   min="10"
-                  max="600"
+                  max="3600"
                   value={question.time}
                   onChange={(e) => handleUpdateQuestion(question.id, 'time', parseInt(e.target.value) || 60)}
                   title="Time in seconds"
@@ -881,21 +972,33 @@ function SessionEditor({ session, onSave, onCancel, onStart }) {
 }
 
 // ============================================================================
-// PRACTICE COMPONENT - Timer Mode (Skip, Done, Pause only)
+// PRACTICE COMPONENT - With MCQ Options and Numerical Input
 // ============================================================================
 
 function Practice({ practiceState, setPracticeState, onComplete, onQuit }) {
   const { session, currentIndex, results, questionTimes, isPaused } = practiceState;
   const currentQuestion = session.questions[currentIndex];
+  const questionType = currentQuestion.type || 'mcq-single';
+  const options = currentQuestion.options || DEFAULT_OPTIONS;
+
   const totalTime = questionTimes[currentIndex];
   const [timeLeft, setTimeLeft] = useState(totalTime);
   const [warningPlayed, setWarningPlayed] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState(questionType === 'mcq-multi' ? [] : '');
   const timerRef = useRef(null);
+  const inputRef = useRef(null);
 
+  // Reset answer when question changes
   useEffect(() => {
     setTimeLeft(questionTimes[currentIndex]);
     setWarningPlayed(false);
-  }, [currentIndex, questionTimes]);
+    const qType = session.questions[currentIndex]?.type || 'mcq-single';
+    setSelectedAnswer(qType === 'mcq-multi' ? [] : '');
+    // Focus input for numerical questions
+    if (qType === 'numerical' && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [currentIndex, questionTimes, session.questions]);
 
   useEffect(() => {
     if (isPaused) {
@@ -927,17 +1030,31 @@ function Practice({ practiceState, setPracticeState, onComplete, onQuit }) {
   // Keyboard shortcuts for practice mode
   useEffect(() => {
     const handleKeyDown = (e) => {
+      // Don't intercept if typing in numerical input
+      if (questionType === 'numerical' && e.target.tagName === 'INPUT') {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleAction('done');
+        }
+        return;
+      }
+
       if (isPaused && e.key !== 'p' && e.key !== 'P' && e.key !== ' ') return;
 
+      const key = e.key.toUpperCase();
+
+      // MCQ option selection via A, B, C, D keys
+      if (options.includes(key) && questionType !== 'numerical') {
+        e.preventDefault();
+        handleOptionSelect(key);
+        return;
+      }
+
       switch (e.key) {
-        case '1':
-        case 'd':
-        case 'D':
         case 'Enter':
           e.preventDefault();
           handleAction('done');
           break;
-        case '2':
         case 's':
         case 'S':
           e.preventDefault();
@@ -962,23 +1079,54 @@ function Practice({ practiceState, setPracticeState, onComplete, onQuit }) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isPaused, currentIndex, timeLeft]);
+  }, [isPaused, currentIndex, timeLeft, questionType, options, selectedAnswer]);
+
+  const handleOptionSelect = (option) => {
+    if (isPaused) return;
+
+    if (questionType === 'mcq-multi') {
+      // Toggle option in array
+      setSelectedAnswer(prev => {
+        if (prev.includes(option)) {
+          return prev.filter(o => o !== option);
+        } else {
+          return [...prev, option].sort();
+        }
+      });
+    } else {
+      // Single select
+      setSelectedAnswer(option);
+    }
+  };
 
   const handleAction = useCallback((status) => {
     clearInterval(timerRef.current);
 
+    // Determine user answer based on question type
+    let userAnswer = null;
+    if (status === 'done') {
+      if (questionType === 'mcq-multi') {
+        userAnswer = selectedAnswer.length > 0 ? selectedAnswer : null;
+      } else if (questionType === 'numerical') {
+        userAnswer = selectedAnswer.trim() || null;
+      } else {
+        userAnswer = selectedAnswer || null;
+      }
+    }
+
     const result = {
       questionId: currentQuestion.id,
       identifier: currentQuestion.identifier,
-      status, // 'done', 'skipped', or 'timeout' - will be updated in review
+      status,
       timeTaken: totalTime - timeLeft,
-      totalTime
+      totalTime,
+      userAnswer,
+      questionType
     };
 
     const newResults = [...results, result];
 
     if (currentIndex + 1 >= session.questions.length) {
-      // All questions done - go to answer key review
       onComplete(newResults);
     } else {
       setPracticeState(prev => ({
@@ -987,7 +1135,7 @@ function Practice({ practiceState, setPracticeState, onComplete, onQuit }) {
         results: newResults
       }));
     }
-  }, [currentIndex, currentQuestion, results, session.questions.length, timeLeft, totalTime, onComplete, setPracticeState]);
+  }, [currentIndex, currentQuestion, results, session.questions.length, timeLeft, totalTime, selectedAnswer, questionType, onComplete, setPracticeState]);
 
   const handlePause = () => {
     setPracticeState(prev => ({ ...prev, isPaused: !prev.isPaused }));
@@ -1001,11 +1149,18 @@ function Practice({ practiceState, setPracticeState, onComplete, onQuit }) {
   if (progress <= 0.1) timerClass = 'critical';
   else if (progress <= 0.3) timerClass = 'warning';
 
+  // Check if answer is selected
+  const hasAnswer = questionType === 'mcq-multi'
+    ? selectedAnswer.length > 0
+    : selectedAnswer !== '';
+
   return (
     <div className="timer-container">
       <div className="timer-question">{currentQuestion.identifier}</div>
       <div className="timer-progress-text">
         Question {currentIndex + 1} of {session.questions.length}
+        {questionType === 'mcq-multi' && <span className="type-badge">Select Multiple</span>}
+        {questionType === 'numerical' && <span className="type-badge">Numerical</span>}
       </div>
 
       <div className="timer-progress">
@@ -1030,15 +1185,65 @@ function Practice({ practiceState, setPracticeState, onComplete, onQuit }) {
         </div>
       </div>
 
+      {/* Answer Input Section */}
+      <div className="answer-input-section">
+        {questionType !== 'numerical' ? (
+          // MCQ Options
+          <div className="mcq-options">
+            {options.map(option => {
+              const isSelected = questionType === 'mcq-multi'
+                ? selectedAnswer.includes(option)
+                : selectedAnswer === option;
+              return (
+                <button
+                  key={option}
+                  className={`mcq-option ${isSelected ? 'selected' : ''}`}
+                  onClick={() => handleOptionSelect(option)}
+                  disabled={isPaused}
+                >
+                  <span className="mcq-option-letter">{option}</span>
+                  <kbd>{option}</kbd>
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          // Numerical Input
+          <div className="numerical-input-container">
+            <input
+              ref={inputRef}
+              type="text"
+              className="numerical-input"
+              placeholder="Enter your answer..."
+              value={selectedAnswer}
+              onChange={(e) => setSelectedAnswer(e.target.value)}
+              disabled={isPaused}
+              autoComplete="off"
+            />
+            <p className="numerical-hint">Press Enter to submit</p>
+          </div>
+        )}
+
+        {/* Selected Answer Display */}
+        {hasAnswer && (
+          <div className="selected-answer-display">
+            Your answer: <strong>
+              {questionType === 'mcq-multi' ? selectedAnswer.join(', ') : selectedAnswer}
+            </strong>
+          </div>
+        )}
+      </div>
+
+      {/* Action Buttons */}
       <div className="answer-buttons answer-buttons-simple">
         <Button
-          className="btn answer-btn answer-btn-done"
+          className={`btn answer-btn answer-btn-done ${hasAnswer ? 'has-answer' : ''}`}
           onPress={() => handleAction('done')}
           isDisabled={isPaused}
         >
           <span className="answer-btn-icon">✓</span>
           <span>Done</span>
-          <kbd>1</kbd>
+          <kbd>Enter</kbd>
         </Button>
         <Button
           className="btn answer-btn answer-btn-skip"
@@ -1047,7 +1252,7 @@ function Practice({ practiceState, setPracticeState, onComplete, onQuit }) {
         >
           <span className="answer-btn-icon">⏭</span>
           <span>Skip</span>
-          <kbd>2</kbd>
+          <kbd>S</kbd>
         </Button>
         <Button
           className="btn answer-btn answer-btn-pause"
@@ -1142,6 +1347,15 @@ function AnswerKeyReview({ practiceState, onSaveResults, onHome }) {
               <span className="review-question-time">
                 {result.timeTaken}s / {result.totalTime}s
               </span>
+              {result.userAnswer && (
+                <span className="review-user-answer">
+                  Your answer: <strong>
+                    {Array.isArray(result.userAnswer)
+                      ? result.userAnswer.join(', ')
+                      : result.userAnswer}
+                  </strong>
+                </span>
+              )}
               {result.status === 'timeout' && (
                 <span className="review-question-badge timeout">Timed out</span>
               )}
