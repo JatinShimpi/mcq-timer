@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from 'react-aria-components';
+import { toast } from 'sonner';
 import { DEFAULT_OPTIONS } from '../constants';
 import { playSound } from '../utils/sound';
 import { formatTime } from '../utils/format';
@@ -103,9 +104,16 @@ export default function Practice({ practiceState, setPracticeState, onComplete, 
                 case 'q':
                 case 'Q':
                     e.preventDefault();
-                    if (confirm('End session early?')) {
-                        onQuit();
-                    }
+                    toast('End session early?', {
+                        action: {
+                            label: 'End Now',
+                            onClick: () => onQuit(),
+                        },
+                        cancel: {
+                            label: 'Continue',
+                            onClick: () => { },
+                        },
+                    });
                     break;
             }
         };

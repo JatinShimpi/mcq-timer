@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button } from 'react-aria-components';
+import { toast } from 'sonner';
 import { playSound } from '../utils/sound';
 
 // ============================================================================
@@ -25,19 +26,32 @@ export default function AnswerKeyReview({ practiceState, onSaveResults, onHome }
     const handleSubmit = () => {
         // Check if all 'done' questions have been marked
         const pendingCount = reviewResults.filter(r => r.finalStatus === 'pending').length;
+
+        const submitResults = () => {
+            // Convert results to final format
+            const finalResults = reviewResults.map(r => ({
+                ...r,
+                status: r.finalStatus === 'pending' ? 'skipped' : r.finalStatus
+            }));
+            onSaveResults(finalResults);
+        };
+
         if (pendingCount > 0) {
-            if (!confirm(`${pendingCount} question(s) not marked. Continue anyway?`)) {
-                return;
-            }
+            toast(`${pendingCount} question(s) not marked`, {
+                description: 'Unmarked questions will be counted as skipped',
+                action: {
+                    label: 'Continue',
+                    onClick: submitResults,
+                },
+                cancel: {
+                    label: 'Go Back',
+                    onClick: () => { },
+                },
+            });
+            return;
         }
 
-        // Convert results to final format
-        const finalResults = reviewResults.map(r => ({
-            ...r,
-            status: r.finalStatus === 'pending' ? 'skipped' : r.finalStatus
-        }));
-
-        onSaveResults(finalResults);
+        submitResults();
     };
 
     const stats = {

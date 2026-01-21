@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { Toaster, toast } from 'sonner';
 import './index.css';
 
 // Import utilities
@@ -148,9 +149,22 @@ function MainApp() {
   };
 
   const handleDeleteSession = (sessionId) => {
-    if (confirm('Delete this session?')) {
-      setSessions(prev => prev.filter(s => s.id !== sessionId));
-    }
+    const session = sessions.find(s => s.id === sessionId);
+    const sessionName = session?.topic || 'Session';
+
+    toast(`Delete "${sessionName}"?`, {
+      action: {
+        label: 'Delete',
+        onClick: () => {
+          setSessions(prev => prev.filter(s => s.id !== sessionId));
+          toast.success('Session deleted');
+        },
+      },
+      cancel: {
+        label: 'Cancel',
+        onClick: () => { },
+      },
+    });
   };
 
   const handleStartPractice = (session) => {
@@ -319,6 +333,18 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <Toaster
+          position="top-center"
+          richColors
+          theme="dark"
+          toastOptions={{
+            style: {
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border-color)',
+              color: 'var(--text-primary)',
+            },
+          }}
+        />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/app" element={<MainApp />} />

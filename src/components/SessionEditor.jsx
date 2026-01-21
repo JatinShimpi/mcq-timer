@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button, TextField, Input, Label } from 'react-aria-components';
+import { toast } from 'sonner';
 import { QUESTION_TYPES, DEFAULT_OPTIONS } from '../constants';
 import { generateId } from '../utils/storage';
 import { formatDuration } from '../utils/format';
@@ -87,11 +88,11 @@ export default function SessionEditor({ session, onSave, onCancel, onStart }) {
 
     const handleSave = () => {
         if (!editSession.topic.trim()) {
-            alert('Please enter a topic name');
+            toast.error('Please enter a topic name');
             return;
         }
         if (editSession.questions.length === 0) {
-            alert('Please add at least one question');
+            toast.error('Please add at least one question');
             return;
         }
         onSave(editSession);
@@ -99,11 +100,11 @@ export default function SessionEditor({ session, onSave, onCancel, onStart }) {
 
     const handleStartPractice = () => {
         if (!editSession.topic.trim()) {
-            alert('Please enter a topic name');
+            toast.error('Please enter a topic name');
             return;
         }
         if (editSession.questions.length === 0) {
-            alert('Please add at least one question');
+            toast.error('Please add at least one question');
             return;
         }
         onSave(editSession);

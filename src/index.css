@@ -2141,6 +2141,7 @@ kbd {
   position: relative;
   display: flex;
   justify-content: center;
+  padding-left: 10px;
 }
 
 .user-avatar-btn {
