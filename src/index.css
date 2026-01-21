@@ -796,7 +796,7 @@ kbd {
 }
 
 .answer-btn {
-  padding: var(--space-sm) var(--space-md);
+  padding: var(--space-md) var(--space-md);
   font-size: var(--font-size-sm);
   font-weight: 600;
   border-radius: var(--radius-md);
@@ -806,6 +806,7 @@ kbd {
   justify-content: center;
   gap: var(--space-xs);
   border: 2px solid;
+  line-height: 1;
 }
 
 .answer-btn kbd {
@@ -815,6 +816,10 @@ kbd {
 
 .answer-btn-icon {
   font-size: var(--font-size-xl);
+  display: flex;
+  align-items: center;
+  line-height: 1;
+  padding-bottom: 3px;
 }
 
 .answer-btn-correct {
@@ -854,6 +859,12 @@ kbd {
   background: var(--info-bg);
   color: var(--info);
   border-color: var(--info);
+}
+
+.answer-btn-icon-resume {
+  font-size: var(--font-size-xl);
+  display: flex;
+  align-items: center;
 }
 
 .answer-btn-pause:hover:not(:disabled) {

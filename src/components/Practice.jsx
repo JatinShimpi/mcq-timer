@@ -299,9 +299,19 @@ export default function Practice({ practiceState, setPracticeState, onComplete, 
                     className="btn answer-btn answer-btn-pause"
                     onPress={handlePause}
                 >
-                    <span className="answer-btn-icon">{isPaused ? '▶' : '⏸'}</span>
-                    <span>{isPaused ? 'Resume' : 'Pause'}</span>
-                    <kbd>Space</kbd>
+                    {isPaused ? (
+                        <>
+                            <span className="answer-btn-icon-resume">▶</span>
+                            <span>Resume</span>
+                            <kbd>Space</kbd>
+                        </>
+                    ) : (
+                        <>
+                            <span className="answer-btn-icon">⏸</span>
+                            <span>Pause</span>
+                            <kbd>Space</kbd>
+                        </>
+                    )}
                 </Button>
             </div>
 
