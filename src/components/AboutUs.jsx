@@ -164,14 +164,7 @@ export default function AboutUs() {
                 <section className="about-section about-mission">
                     <h2 className="about-section-title">Our Story</h2>
                     <p className="about-mission-text">
-                        We believe that effective exam preparation shouldn't be complicated.
-                        Qlock was born from our own experiences preparing for competitive exams,
-                        where we struggled to find a simple tool to practice time-critical questions.
-                    </p>
-                    <p className="about-mission-text">
-                        Our goal is to help students build speed and accuracy through focused,
-                        timed practice sessions. Whether you're preparing for GATE, JEE, NEET,
-                        or any other competitive exam, Qlock is here to help you succeed.
+                        One day Rishi and I were siting in our room and brainstorming business ideas. it was a fun thing we both liked to think about. He would always think about ideas which are larger than life and i was the one who always grounded him "i love your idea but we need to start small buddy" and he would go like "boooooo youre a buzzkill bro" "nah i am just a realist" i said. after that i casually asked him about his GATE preparation and is there any problem that i can solve with my skills he thought about it and told me about this project. Rishi is the first tester for this project and i developed it
                     </p>
                 </section>
 
