@@ -5,12 +5,13 @@ import { QUESTION_TYPES, DEFAULT_OPTIONS } from '../constants';
 import { generateId } from '../utils/storage';
 import { formatDuration } from '../utils/format';
 import TimePicker from './TimePicker';
+import AutocompleteInput from './AutocompleteInput';
 
 // ============================================================================
 // SESSION EDITOR COMPONENT
 // ============================================================================
 
-export default function SessionEditor({ session, onSave, onCancel, onStart }) {
+export default function SessionEditor({ session, onSave, onCancel, onStart, existingTopics = [], existingSubtopics = [] }) {
     const [editSession, setEditSession] = useState(session);
     const [draggedIndex, setDraggedIndex] = useState(null);
 
@@ -117,30 +118,22 @@ export default function SessionEditor({ session, onSave, onCancel, onStart }) {
                 {session.topic ? 'Edit Session' : 'New Session'}
             </h1>
 
-            <div className="form-group">
-                <TextField>
-                    <Label className="form-label">Topic / Subject *</Label>
-                    <Input
-                        className="form-input"
-                        placeholder="e.g., Data Structures - Trees"
-                        value={editSession.topic}
-                        onChange={(e) => setEditSession(prev => ({ ...prev, topic: e.target.value }))}
-                        autoFocus
-                    />
-                </TextField>
-            </div>
+            <AutocompleteInput
+                value={editSession.topic}
+                onChange={(val) => setEditSession(prev => ({ ...prev, topic: val }))}
+                suggestions={existingTopics}
+                placeholder="e.g., Data Structures - Trees"
+                label="Topic / Subject *"
+                autoFocus
+            />
 
-            <div className="form-group">
-                <TextField>
-                    <Label className="form-label">Subtopic (Optional)</Label>
-                    <Input
-                        className="form-input"
-                        placeholder="e.g., Binary Search Trees"
-                        value={editSession.subtopic}
-                        onChange={(e) => setEditSession(prev => ({ ...prev, subtopic: e.target.value }))}
-                    />
-                </TextField>
-            </div>
+            <AutocompleteInput
+                value={editSession.subtopic || ''}
+                onChange={(val) => setEditSession(prev => ({ ...prev, subtopic: val }))}
+                suggestions={existingSubtopics}
+                placeholder="e.g., Binary Search Trees"
+                label="Subtopic (Optional)"
+            />
 
             <div className="form-group">
                 <label className="form-label">Timer Mode</label>

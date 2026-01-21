@@ -483,6 +483,45 @@ kbd {
   margin-top: var(--space-sm);
 }
 
+/* Autocomplete Input */
+.autocomplete-container {
+  position: relative;
+  width: 100%;
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: var(--space-xs);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 50;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.autocomplete-item {
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.highlighted {
+  background: var(--bg-glass);
+}
+
+.autocomplete-match {
+  font-weight: 700;
+  color: var(--accent-primary);
+}
+
 /* Tabs */
 .tabs {
   display: flex;
@@ -796,7 +835,7 @@ kbd {
 }
 
 .answer-btn {
-  padding: var(--space-md) var(--space-md);
+  padding: var(--space-sm) var(--space-sm);
   font-size: var(--font-size-sm);
   font-weight: 600;
   border-radius: var(--radius-md);
@@ -2497,4 +2536,60 @@ kbd {
   background: var(--bg-glass);
   border-color: var(--accent-primary);
   color: var(--text-primary);
+}
+
+/* Dashboard Drill-Down Styles */
+.section-hint {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin-bottom: var(--space-md);
+}
+
+.topic-group {
+  display: contents;
+}
+
+.topic-table-row.clickable {
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.topic-table-row.clickable:hover {
+  background: var(--bg-glass);
+}
+
+.topic-table-row.expanded {
+  background: var(--bg-glass);
+}
+
+.topic-expand-icon {
+  display: inline-block;
+  width: 16px;
+  margin-right: var(--space-xs);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  transition: transform var(--transition-fast);
+}
+
+.subtopic-container {
+  display: contents;
+}
+
+.subtopic-row {
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.subtopic-row:hover {
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.subtopic-name {
+  padding-left: var(--space-lg);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.subtopic-empty {
+  color: var(--text-muted);
+  font-style: italic;
 }

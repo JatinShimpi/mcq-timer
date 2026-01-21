@@ -333,6 +333,8 @@ function MainApp() {
             onSave={handleSaveSession}
             onCancel={handleBackToHome}
             onStart={handleStartPractice}
+            existingTopics={[...new Set(sessions.map(s => s.topic).filter(Boolean))]}
+            existingSubtopics={[...new Set(sessions.map(s => s.subtopic).filter(Boolean))]}
           />
         )}
 

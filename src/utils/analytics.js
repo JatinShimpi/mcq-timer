@@ -25,19 +25,34 @@ export function calculateAnalytics(sessions) {
     const recentCorrect = recentResults.filter(r => r.status === 'correct').length;
     const recentAccuracy = recentResults.length > 0 ? Math.round((recentCorrect / recentResults.length) * 100) : 0;
 
-    // Topic breakdown
+    // Topic and subtopic breakdown
     const topicStats = {};
     sessions.forEach(session => {
         const topic = session.topic || 'Untitled';
+        const subtopic = session.subtopic || null;
+
         if (!topicStats[topic]) {
-            topicStats[topic] = { attempts: 0, correct: 0, total: 0 };
+            topicStats[topic] = { attempts: 0, correct: 0, total: 0, subtopics: {} };
         }
+
         (session.attempts || []).forEach(attempt => {
             topicStats[topic].attempts++;
             (attempt.results || []).forEach(result => {
                 topicStats[topic].total++;
                 if (result.status === 'correct') topicStats[topic].correct++;
             });
+
+            // Track subtopic stats
+            if (subtopic) {
+                if (!topicStats[topic].subtopics[subtopic]) {
+                    topicStats[topic].subtopics[subtopic] = { attempts: 0, correct: 0, total: 0 };
+                }
+                topicStats[topic].subtopics[subtopic].attempts++;
+                (attempt.results || []).forEach(result => {
+                    topicStats[topic].subtopics[subtopic].total++;
+                    if (result.status === 'correct') topicStats[topic].subtopics[subtopic].correct++;
+                });
+            }
         });
     });
 

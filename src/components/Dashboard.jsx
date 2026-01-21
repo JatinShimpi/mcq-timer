@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from 'react-aria-components';
 import { calculateAnalytics } from '../utils/analytics';
 import { formatDuration } from '../utils/format';
@@ -9,6 +9,7 @@ import { formatDuration } from '../utils/format';
 
 export default function Dashboard({ sessions, onBack }) {
     const analytics = useMemo(() => calculateAnalytics(sessions), [sessions]);
+    const [expandedTopic, setExpandedTopic] = useState(null);
 
     // Process analytics for display
     const overall = {
@@ -23,11 +24,20 @@ export default function Dashboard({ sessions, onBack }) {
         topic,
         totalQuestions: data.total,
         accuracy: data.total > 0 ? Math.round((data.correct / data.total) * 100) : 0,
-        avgTime: 0, // Not tracked per topic
-        trend: 0 // Not tracked
+        avgTime: 0,
+        trend: 0,
+        subtopics: Object.entries(data.subtopics || {}).map(([subtopic, subData]) => ({
+            subtopic,
+            totalQuestions: subData.total,
+            accuracy: subData.total > 0 ? Math.round((subData.correct / subData.total) * 100) : 0
+        }))
     }));
 
     const weakTopics = topicStats.filter(t => t.accuracy < 60 && t.totalQuestions >= 5);
+
+    const handleTopicClick = (topic) => {
+        setExpandedTopic(expandedTopic === topic ? null : topic);
+    };
 
     return (
         <div className="app-container">
@@ -83,6 +93,7 @@ export default function Dashboard({ sessions, onBack }) {
                     {/* Topic Performance Table */}
                     <div className="dashboard-section">
                         <h2 className="section-title">Performance by Topic</h2>
+                        <p className="section-hint">Click on a topic to view subtopic breakdown</p>
                         <div className="topic-table">
                             <div className="topic-table-header">
                                 <span>Topic</span>
@@ -92,16 +103,55 @@ export default function Dashboard({ sessions, onBack }) {
                                 <span>Trend</span>
                             </div>
                             {topicStats.map(topic => (
-                                <div key={topic.topic} className="topic-table-row">
-                                    <span className="topic-name">{topic.topic}</span>
-                                    <span>{topic.totalQuestions}</span>
-                                    <span className={topic.accuracy >= 60 ? 'text-success' : 'text-danger'}>
-                                        {topic.accuracy}%
-                                    </span>
-                                    <span>{topic.avgTime}s</span>
-                                    <span className={`trend ${topic.trend > 0 ? 'up' : topic.trend < 0 ? 'down' : ''}`}>
-                                        {topic.trend > 0 ? '↑' : topic.trend < 0 ? '↓' : '→'} {Math.abs(topic.trend)}%
-                                    </span>
+                                <div key={topic.topic} className="topic-group">
+                                    <div
+                                        className={`topic-table-row clickable ${expandedTopic === topic.topic ? 'expanded' : ''}`}
+                                        onClick={() => handleTopicClick(topic.topic)}
+                                    >
+                                        <span className="topic-name">
+                                            <span className="topic-expand-icon">
+                                                {expandedTopic === topic.topic ? '▼' : '▶'}
+                                            </span>
+                                            {topic.topic}
+                                        </span>
+                                        <span>{topic.totalQuestions}</span>
+                                        <span className={topic.accuracy >= 60 ? 'text-success' : 'text-danger'}>
+                                            {topic.accuracy}%
+                                        </span>
+                                        <span>{topic.avgTime}s</span>
+                                        <span className={`trend ${topic.trend > 0 ? 'up' : topic.trend < 0 ? 'down' : ''}`}>
+                                            {topic.trend > 0 ? '↑' : topic.trend < 0 ? '↓' : '→'} {Math.abs(topic.trend)}%
+                                        </span>
+                                    </div>
+
+                                    {/* Subtopic rows */}
+                                    {expandedTopic === topic.topic && (
+                                        <div className="subtopic-container">
+                                            {topic.subtopics.length > 0 ? (
+                                                topic.subtopics.map(sub => (
+                                                    <div key={sub.subtopic} className="topic-table-row subtopic-row">
+                                                        <span className="topic-name subtopic-name">
+                                                            ↳ {sub.subtopic}
+                                                        </span>
+                                                        <span>{sub.totalQuestions}</span>
+                                                        <span className={sub.accuracy >= 60 ? 'text-success' : 'text-danger'}>
+                                                            {sub.accuracy}%
+                                                        </span>
+                                                        <span>—</span>
+                                                        <span>—</span>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <div className="topic-table-row subtopic-row subtopic-empty">
+                                                    <span className="topic-name subtopic-name">No subtopics</span>
+                                                    <span>—</span>
+                                                    <span>—</span>
+                                                    <span>—</span>
+                                                    <span>—</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
