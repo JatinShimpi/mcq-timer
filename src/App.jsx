@@ -28,7 +28,7 @@ import LandingPage from './components/LandingPage';
 
 function MainApp() {
   const navigate = useNavigate();
-  const { isAuthenticated, syncLocalSessions, fetchSessions } = useAuth();
+  const { isAuthenticated, syncLocalSessions, fetchSessions, saveSession, deleteSession: deleteCloudSession, loading: authLoading } = useAuth();
   const [sessions, setSessions] = useState(() => loadSessions());
   const [currentView, setCurrentView] = useState('home');
   const [currentSession, setCurrentSession] = useState(null);
@@ -36,47 +36,54 @@ function MainApp() {
   const [theme, setTheme] = useState(() => loadTheme());
   const [hasSynced, setHasSynced] = useState(() => localStorage.getItem('qlock-synced') === 'true');
 
-  // Handle first-time sync after login
+  // Handle sync after login and fetch on reload
   useEffect(() => {
     const performSync = async () => {
+      // Wait for auth to finish loading
+      if (authLoading) return;
+
       if (isAuthenticated && !hasSynced && sessions.length > 0) {
+        // First time sync: upload local sessions to cloud
         const cloudSessions = await syncLocalSessions(sessions);
         if (cloudSessions && cloudSessions.length > 0) {
-          setSessions(cloudSessions.map(s => ({
+          const mappedSessions = cloudSessions.map(s => ({
             ...s,
             id: s.client_id,
             _id: s.id,
             timerMode: s.timer_mode,
             timePerQuestion: s.time_per_question,
             totalTime: s.total_time,
-          })));
-          localStorage.removeItem('qlock-sessions');
+          }));
+          setSessions(mappedSessions);
+          saveSessions(mappedSessions); // Keep cache
           localStorage.setItem('qlock-synced', 'true');
           setHasSynced(true);
         }
       } else if (isAuthenticated && hasSynced) {
+        // Already synced: fetch from cloud
         const cloudSessions = await fetchSessions();
-        if (cloudSessions) {
-          setSessions(cloudSessions.map(s => ({
+        if (cloudSessions && cloudSessions.length > 0) {
+          const mappedSessions = cloudSessions.map(s => ({
             ...s,
             id: s.client_id,
             _id: s.id,
             timerMode: s.timer_mode,
             timePerQuestion: s.time_per_question,
             totalTime: s.total_time,
-          })));
+          }));
+          setSessions(mappedSessions);
+          saveSessions(mappedSessions); // Keep cache for offline/reload
         }
+        // If fetch fails, we still have cached sessions from localStorage init
       }
     };
     performSync();
-  }, [isAuthenticated, hasSynced]);
+  }, [isAuthenticated, hasSynced, authLoading]);
 
-  // Persist sessions to localStorage
+  // Always persist sessions to localStorage as cache
   useEffect(() => {
-    if (!isAuthenticated && !hasSynced) {
-      saveSessions(sessions);
-    }
-  }, [sessions, isAuthenticated, hasSynced]);
+    saveSessions(sessions);
+  }, [sessions]);
 
   // Apply theme
   useEffect(() => {
@@ -136,7 +143,17 @@ function MainApp() {
     setCurrentView('editor');
   };
 
-  const handleSaveSession = (session) => {
+  const handleSaveSession = async (session) => {
+    // Transform session data for backend (camelCase to snake_case)
+    const sessionData = {
+      ...session,
+      client_id: session.id,
+      timer_mode: session.timerMode,
+      time_per_question: session.timePerQuestion,
+      total_time: session.totalTime,
+    };
+
+    // Update local state immediately for responsiveness
     setSessions(prev => {
       const exists = prev.find(s => s.id === session.id);
       if (exists) {
@@ -146,6 +163,22 @@ function MainApp() {
     });
     setCurrentView('home');
     setCurrentSession(null);
+
+    // Sync to cloud if authenticated
+    if (isAuthenticated) {
+      const savedSession = await saveSession(sessionData);
+      if (savedSession) {
+        // Update with cloud ID for future updates
+        setSessions(prev => prev.map(s =>
+          s.id === session.id
+            ? { ...s, _id: savedSession.id }
+            : s
+        ));
+        toast.success('Session saved to cloud');
+      } else {
+        toast.error('Failed to sync to cloud');
+      }
+    }
   };
 
   const handleDeleteSession = (sessionId) => {
@@ -155,9 +188,20 @@ function MainApp() {
     toast(`Delete "${sessionName}"?`, {
       action: {
         label: 'Delete',
-        onClick: () => {
+        onClick: async () => {
           setSessions(prev => prev.filter(s => s.id !== sessionId));
-          toast.success('Session deleted');
+
+          // Delete from cloud if authenticated and has cloud ID
+          if (isAuthenticated && session?._id) {
+            const deleted = await deleteCloudSession(session._id);
+            if (deleted) {
+              toast.success('Session deleted');
+            } else {
+              toast.error('Failed to delete from cloud');
+            }
+          } else {
+            toast.success('Session deleted');
+          }
         },
       },
       cancel: {
