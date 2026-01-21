@@ -98,7 +98,7 @@ export default function Header({ onHomeClick, onDashboardClick, onSignInClick, s
                         )}
                     </div>
                 ) : (
-                    <Button className="btn btn-secondary btn-md" onPress={onSignInClick}>
+                    <Button className="btn btn-ghost btn-md" onPress={onSignInClick}>
                         Sign In
                     </Button>
                 )}

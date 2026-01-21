@@ -2139,6 +2139,8 @@ kbd {
 /* User Menu Styles */
 .user-menu {
   position: relative;
+  display: flex;
+  justify-content: center;
 }
 
 .user-avatar-btn {
