@@ -138,7 +138,7 @@ function hmsToSeconds({ hours, minutes, seconds }) {
 // TIME PICKER COMPONENT - Scrollable wheels (alarm-style)
 // ============================================================================
 
-function TimePicker({ value, onChange, showHours = true }) {
+function TimePicker({ value, onChange, showHours = true, compact = false }) {
   const hms = secondsToHMS(value);
 
   const handleChange = (field, newValue) => {
@@ -149,14 +149,17 @@ function TimePicker({ value, onChange, showHours = true }) {
   const hours = Array.from({ length: 24 }, (_, i) => i);
   const minutesSeconds = Array.from({ length: 60 }, (_, i) => i);
 
+  const containerClass = compact ? 'time-picker time-picker-compact' : 'time-picker';
+  const selectClass = compact ? 'time-picker-select time-picker-select-compact' : 'time-picker-select';
+
   return (
-    <div className="time-picker">
+    <div className={containerClass}>
       {showHours && (
         <>
           <div className="time-picker-wheel">
-            <label className="time-picker-label">H</label>
+            {!compact && <label className="time-picker-label">H</label>}
             <select
-              className="time-picker-select"
+              className={selectClass}
               value={hms.hours}
               onChange={(e) => handleChange('hours', e.target.value)}
             >
@@ -169,9 +172,9 @@ function TimePicker({ value, onChange, showHours = true }) {
         </>
       )}
       <div className="time-picker-wheel">
-        <label className="time-picker-label">M</label>
+        {!compact && <label className="time-picker-label">M</label>}
         <select
-          className="time-picker-select"
+          className={selectClass}
           value={hms.minutes}
           onChange={(e) => handleChange('minutes', e.target.value)}
         >
@@ -182,9 +185,9 @@ function TimePicker({ value, onChange, showHours = true }) {
       </div>
       <span className="time-picker-separator">:</span>
       <div className="time-picker-wheel">
-        <label className="time-picker-label">S</label>
+        {!compact && <label className="time-picker-label">S</label>}
         <select
-          className="time-picker-select"
+          className={selectClass}
           value={hms.seconds}
           onChange={(e) => handleChange('seconds', e.target.value)}
         >
@@ -938,15 +941,14 @@ function SessionEditor({ session, onSave, onCancel, onStart }) {
                 ))}
               </select>
               {editSession.timerMode === 'individual' && (
-                <input
-                  type="number"
-                  className="question-time"
-                  min="10"
-                  max="3600"
-                  value={question.time}
-                  onChange={(e) => handleUpdateQuestion(question.id, 'time', parseInt(e.target.value) || 60)}
-                  title="Time in seconds"
-                />
+                <div className="question-time-picker">
+                  <TimePicker
+                    value={question.time}
+                    onChange={(seconds) => handleUpdateQuestion(question.id, 'time', Math.max(10, seconds))}
+                    showHours={false}
+                    compact={true}
+                  />
+                </div>
               )}
               <Button
                 className="btn btn-ghost btn-icon question-delete"

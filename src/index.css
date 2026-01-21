@@ -1698,6 +1698,31 @@ kbd {
   margin-top: var(--space-lg);
 }
 
+/* Compact Time Picker for inline use */
+.time-picker-compact {
+  padding: var(--space-xs);
+  background: transparent;
+  border: none;
+  gap: 2px;
+}
+
+.time-picker-compact .time-picker-separator {
+  font-size: var(--font-size-lg);
+  margin-top: 0;
+  padding: 0 2px;
+}
+
+.time-picker-select-compact {
+  width: 48px;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-md);
+  font-weight: 600;
+}
+
+.question-time-picker {
+  flex-shrink: 0;
+}
+
 /* ============================================================================
    QUESTION TYPE DROPDOWN
    ============================================================================ */
