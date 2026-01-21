@@ -42,8 +42,11 @@ function MainApp() {
       // Wait for auth to finish loading
       if (authLoading) return;
 
-      if (isAuthenticated && !hasSynced && sessions.length > 0) {
-        // First time sync: upload local sessions to cloud
+      if (!isAuthenticated) return;
+
+      // If we have local sessions that haven't been synced, upload them first
+      if (!hasSynced && sessions.length > 0) {
+        console.log('Syncing local sessions to cloud...');
         const cloudSessions = await syncLocalSessions(sessions);
         if (cloudSessions && cloudSessions.length > 0) {
           const mappedSessions = cloudSessions.map(s => ({
@@ -55,30 +58,39 @@ function MainApp() {
             totalTime: s.total_time,
           }));
           setSessions(mappedSessions);
-          saveSessions(mappedSessions); // Keep cache
-          localStorage.setItem('qlock-synced', 'true');
-          setHasSynced(true);
+          saveSessions(mappedSessions);
         }
-      } else if (isAuthenticated && hasSynced) {
-        // Already synced: fetch from cloud
-        const cloudSessions = await fetchSessions();
-        if (cloudSessions && cloudSessions.length > 0) {
-          const mappedSessions = cloudSessions.map(s => ({
-            ...s,
-            id: s.client_id,
-            _id: s.id,
-            timerMode: s.timer_mode,
-            timePerQuestion: s.time_per_question,
-            totalTime: s.total_time,
-          }));
-          setSessions(mappedSessions);
-          saveSessions(mappedSessions); // Keep cache for offline/reload
-        }
-        // If fetch fails, we still have cached sessions from localStorage init
+        localStorage.setItem('qlock-synced', 'true');
+        setHasSynced(true);
+        return;
+      }
+
+      // Fetch from cloud (both for post-sync and on reload)
+      console.log('Fetching sessions from cloud...');
+      const cloudSessions = await fetchSessions();
+      console.log('Fetched sessions:', cloudSessions);
+
+      if (cloudSessions && cloudSessions.length > 0) {
+        const mappedSessions = cloudSessions.map(s => ({
+          ...s,
+          id: s.client_id,
+          _id: s.id,
+          timerMode: s.timer_mode,
+          timePerQuestion: s.time_per_question,
+          totalTime: s.total_time,
+        }));
+        setSessions(mappedSessions);
+        saveSessions(mappedSessions);
+      }
+
+      // Mark as synced
+      if (!hasSynced) {
+        localStorage.setItem('qlock-synced', 'true');
+        setHasSynced(true);
       }
     };
     performSync();
-  }, [isAuthenticated, hasSynced, authLoading]);
+  }, [isAuthenticated, authLoading]);
 
   // Always persist sessions to localStorage as cache
   useEffect(() => {
