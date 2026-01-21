@@ -21,6 +21,8 @@ import Results from './components/Results';
 import Dashboard from './components/Dashboard';
 import SignIn from './components/SignIn';
 import LandingPage from './components/LandingPage';
+import ComingSoon from './components/ComingSoon';
+import AboutUs from './components/AboutUs';
 
 // ============================================================================
 // MAIN APP CONTENT (the actual timer app at /app)
@@ -407,6 +409,8 @@ export default function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/app" element={<MainApp />} />
           <Route path="/signin" element={<SignInPage />} />
+          <Route path="/coming-soon" element={<ComingSoon />} />
+          <Route path="/about" element={<AboutUs />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

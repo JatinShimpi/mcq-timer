@@ -55,12 +55,12 @@ export default function LandingPage() {
                             <span>OR</span>
                         </div>
 
-                        <a href="#" className="hero-playstore-btn">
+                        <Button className="hero-playstore-btn" onPress={() => navigate('/coming-soon')}>
                             <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
                                 <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
                             </svg>
                             <span>Download on Play Store</span>
-                        </a>
+                        </Button>
                     </div>
                 </div>
             </section>
@@ -89,12 +89,61 @@ export default function LandingPage() {
                         <h3 className="feature-title">Cloud Sync</h3>
                         <p className="feature-desc">Sign in to sync your sessions across devices</p>
                     </div>
+                    <div className="feature-card">
+                        <span className="feature-icon">📁</span>
+                        <h3 className="feature-title">Organize by Topic</h3>
+                        <p className="feature-desc">Create sessions with topics and subtopics for better organization</p>
+                    </div>
+                    <div className="feature-card">
+                        <span className="feature-icon">🔄</span>
+                        <h3 className="feature-title">Unlimited Retakes</h3>
+                        <p className="feature-desc">Practice the same session multiple times and track improvement</p>
+                    </div>
+                    <div className="feature-card">
+                        <span className="feature-icon">⚡</span>
+                        <h3 className="feature-title">Instant Feedback</h3>
+                        <p className="feature-desc">Mark answers as correct, incorrect, or skipped in real-time</p>
+                    </div>
+                    <div className="feature-card">
+                        <span className="feature-icon">🌙</span>
+                        <h3 className="feature-title">Dark Mode</h3>
+                        <p className="feature-desc">Easy on the eyes during late-night study sessions</p>
+                    </div>
+                    <div className="feature-card">
+                        <span className="feature-icon">📱</span>
+                        <h3 className="feature-title">Works Offline</h3>
+                        <p className="feature-desc">Practice anywhere, even without internet connection</p>
+                    </div>
+                    <div className="feature-card">
+                        <span className="feature-icon">🎨</span>
+                        <h3 className="feature-title">Clean Interface</h3>
+                        <p className="feature-desc">Distraction-free design to keep you focused on practice</p>
+                    </div>
+                    <div className="feature-card">
+                        <span className="feature-icon">📈</span>
+                        <h3 className="feature-title">Subtopic Drill-Down</h3>
+                        <p className="feature-desc">Click topics in dashboard to see subtopic-level performance</p>
+                    </div>
+                    <div className="feature-card">
+                        <span className="feature-icon">🔍</span>
+                        <h3 className="feature-title">Smart Autocomplete</h3>
+                        <p className="feature-desc">Quickly find topics and subtopics with search suggestions</p>
+                    </div>
                 </div>
             </section>
 
             {/* Footer */}
             <footer className="landing-footer">
                 <p>Built for serious exam preparation</p>
+                <div className="landing-footer-links">
+                    <button onClick={() => navigate('/about')} className="landing-footer-link">
+                        About Us
+                    </button>
+                    <span className="landing-footer-divider">•</span>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdFMO2y9qlWbhiBWyWKZ4eQwJhzHL70x6MJO5YJqLCGqft_bA/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer" className="landing-footer-link">
+                        Feedback
+                    </a>
+                </div>
             </footer>
         </div>
     );
