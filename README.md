@@ -1,13 +1,7 @@
 <div align="center">
-  <img src="public/icons/icon.svg" alt="Qlock Logo" width="120" height="120" />
+  <img src="public/icons/icon-readme.svg" alt="Qlock Logo" width="120" height="120" />
   <h1>Qlock</h1>
   <p><strong>Master time-critical questions for competitive exams.</strong></p>
-  
-  <p>
-    <a href="#features">Features</a> •
-    <a href="#tech-stack">Tech Stack</a> •
-    <a href="#getting-started">Getting Started</a>
-  </p>
 </div>
 
 ---
@@ -30,26 +24,6 @@
 - **Database**: MongoDB
 - **Hosting**: Netlify (Frontend), Koyeb (Backend)
 
-## 🏃‍♂️ Getting Started
-
-1.  **Clone the repository**
-    ```bash
-    git clone https://github.com/JatinShimpi/mcq-timer.git
-    cd mcq-timer
-    ```
-
-2.  **Install dependencies**
-    ```bash
-    npm install
-    ```
-
-3.  **Run the development server**
-    ```bash
-    npm run dev
-    ```
-
-4.  **Open in browser**
-    Navigate to `http://localhost:5173`
 
 ---
 
