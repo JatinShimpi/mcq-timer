@@ -20,7 +20,7 @@
 ## 🛠️ Tech Stack
 
 - **Frontend**: React, Vite, React Router, React Aria, Sonner
-- **Backend**: Rust (Axum), Tokio
+- **Backend**: Rust (Axum), Tokio - [API Repository](https://github.com/JatinShimpi/qlock-api)
 - **Database**: MongoDB
 - **Hosting**: Netlify (Frontend), Koyeb (Backend)
 
