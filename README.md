@@ -10,12 +10,12 @@
 
 ## Features
 
-- ** Timed Practice**: Simulate real exam conditions with adjustable timers per question.
-- ** Detailed Analytics**: Track your progress with comprehensive performance dashboards and subtopic drill-downs.
-- ** Cloud Sync**: Seamlessly sync your sessions and progress across devices (Google/GitHub Auth).
-- ** Multiple Question Types**: Support for MCQ, MSQ, and Numerical Answer Type (NAT) questions.
-- ** Smart Organization**: Organize sessions by topics and subtopics with auto-complete suggestions.
-- ** Responsive Design**: optimized for both desktop and mobile web experiences.
+- **Timed Practice**: Simulate real exam conditions with adjustable timers per question.
+- **Detailed Analytics**: Track your progress with comprehensive performance dashboards and subtopic drill-downs.
+- **Cloud Sync**: Seamlessly sync your sessions and progress across devices (Google/GitHub Auth).
+- **Multiple Question Types**: Support for MCQ, MSQ, and Numerical Answer Type (NAT) questions.
+- **Smart Organization**: Organize sessions by topics and subtopics with auto-complete suggestions.
+- **Responsive Design**: optimized for both desktop and mobile web experiences.
 
 ## Tech Stack
 
