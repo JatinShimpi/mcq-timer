@@ -6,17 +6,17 @@ export default function AboutUs() {
 
     const creators = [
         {
-            name: 'Creator 1',
-            role: 'Full Stack Developer',
-            description: 'Passionate about building tools that help students succeed. Experienced in React, Node.js, and cloud technologies.',
+            name: 'Jatin Shimpi',
+            role: 'Developer',
+            description: 'I built all the features for this project.',
             photo: null, // Placeholder - add actual photo path
             github: 'https://github.com/',
             linkedin: 'https://linkedin.com/'
         },
         {
-            name: 'Creator 2',
-            role: 'UI/UX Designer & Developer',
-            description: 'Focused on creating intuitive and beautiful user experiences. Loves turning complex problems into simple solutions.',
+            name: 'Rishikesh Astarkar',
+            role: 'User 0, Tester and Angel investor',
+            description: 'I tested the features and provided feedback.',
             photo: null, // Placeholder - add actual photo path
             github: 'https://github.com/',
             linkedin: 'https://linkedin.com/'
