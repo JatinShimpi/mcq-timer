@@ -168,7 +168,7 @@ export default function Sidebar({
                                         </div>
                                         <div className="user-dropdown-divider" />
                                         <button className="user-dropdown-item" onClick={handleLogout}>
-                                            <PixelIcon name="IconLogout" size={20} style={{ marginRight: 8 }} />
+                                            <PixelIcon name="IconLogout" size={20} />
                                             Sign out
                                         </button>
                                     </div>
