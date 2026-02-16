@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { Button } from 'react-aria-components';
+import PixelIcon from './PixelIcon';
 
 // ============================================================================
 // RESULTS COMPONENT - Final Results Display
@@ -26,7 +27,7 @@ export default function Results({ practiceState, onRetry, onHome }) {
     return (
         <div className="results-container">
             <div className="results-header">
-                <h1 className="results-title">Session Complete! 🎉</h1>
+                <h1 className="results-title">Session Complete! <PixelIcon name="IconMoodHappy" size={32} /></h1>
                 <p className="results-subtitle">{session.topic}</p>
             </div>
 
@@ -64,10 +65,10 @@ export default function Results({ practiceState, onRetry, onHome }) {
                 {results.map((result, index) => (
                     <div key={index} className="review-item">
                         <div className={`review-item-status ${result.status}`}>
-                            {result.status === 'correct' && '✓'}
-                            {result.status === 'incorrect' && '✗'}
-                            {result.status === 'skipped' && '⏭'}
-                            {result.status === 'timeout' && '⏱'}
+                            {result.status === 'correct' && <PixelIcon name="IconCheck" size={16} />}
+                            {result.status === 'incorrect' && <PixelIcon name="IconClose" size={16} />}
+                            {result.status === 'skipped' && <PixelIcon name="IconForward" size={16} />}
+                            {result.status === 'timeout' && <PixelIcon name="IconClock" size={16} />}
                         </div>
                         <div className="review-item-info">
                             <div className="review-item-question">{result.identifier}</div>
@@ -87,10 +88,10 @@ export default function Results({ practiceState, onRetry, onHome }) {
 
             <div className="results-actions">
                 <Button className="btn btn-primary btn-lg" onPress={onRetry}>
-                    🔄 Try Again
+                    <PixelIcon name="IconReload" size={20} /> Try Again
                 </Button>
                 <Button className="btn btn-secondary" onPress={onHome}>
-                    ← Back to Home
+                    <PixelIcon name="IconArrowLeft" size={20} /> Back to Home
                 </Button>
             </div>
         </div>

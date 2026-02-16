@@ -131,7 +131,7 @@ export default function SignIn({ onBack }) {
         <div className="signin-container">
             <div className="signin-card">
                 <div className="signin-header">
-                    <img src="/icons/icon.svg" alt="Qlock" className="signin-logo" />
+                    <img src="/icons/icon-readme.svg" alt="Qlock" className="signin-logo" />
                     <h1 className="signin-title">Sign in to Qlock</h1>
                     <p className="signin-subtitle">Sync your sessions across devices</p>
                 </div>

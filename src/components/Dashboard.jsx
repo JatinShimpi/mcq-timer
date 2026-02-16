@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Button } from 'react-aria-components';
+import PixelIcon from './PixelIcon';
 import { calculateAnalytics } from '../utils/analytics';
 import { formatDuration } from '../utils/format';
 
@@ -42,13 +43,13 @@ export default function Dashboard({ sessions, onBack }) {
     return (
         <div className="app-container">
             <div className="dashboard-header">
-                <h1 className="page-title">📊 Performance Dashboard</h1>
+                <h1 className="page-title"><PixelIcon name="IconChartBar" size={32} /> Performance Dashboard</h1>
                 <p className="page-subtitle">Track your progress across all topics</p>
             </div>
 
             {overall.totalQuestions === 0 ? (
                 <div className="empty-state">
-                    <div className="empty-state-icon">📈</div>
+                    <div className="empty-state-icon"><PixelIcon name="IconChartLine" size={64} /></div>
                     <h2 className="empty-state-title">No data yet</h2>
                     <p className="empty-state-text">Complete some practice sessions to see your analytics</p>
                     <Button className="btn btn-primary" onPress={onBack}>
@@ -82,7 +83,7 @@ export default function Dashboard({ sessions, onBack }) {
                     {/* Weak Areas Alert */}
                     {weakTopics.length > 0 && (
                         <div className="alert alert-warning">
-                            <span className="alert-icon">⚠️</span>
+                            <span className="alert-icon"><PixelIcon name="IconAlertTriangle" size={20} /></span>
                             <div>
                                 <strong>Weak Areas Detected:</strong> {weakTopics.map(t => t.topic).join(', ')}
                                 <p className="alert-hint">These topics have accuracy below 60%. Focus more practice here!</p>
@@ -110,7 +111,7 @@ export default function Dashboard({ sessions, onBack }) {
                                     >
                                         <span className="topic-name">
                                             <span className="topic-expand-icon">
-                                                {expandedTopic === topic.topic ? '▼' : '▶'}
+                                                {expandedTopic === topic.topic ? <PixelIcon name="IconChevronDown" size={16} /> : <PixelIcon name="IconChevronRight" size={16} />}
                                             </span>
                                             {topic.topic}
                                         </span>
@@ -120,7 +121,7 @@ export default function Dashboard({ sessions, onBack }) {
                                         </span>
                                         <span>{topic.avgTime}s</span>
                                         <span className={`trend ${topic.trend > 0 ? 'up' : topic.trend < 0 ? 'down' : ''}`}>
-                                            {topic.trend > 0 ? '↑' : topic.trend < 0 ? '↓' : '→'} {Math.abs(topic.trend)}%
+                                            {topic.trend > 0 ? <PixelIcon name="IconArrowUp" size={16} /> : topic.trend < 0 ? <PixelIcon name="IconArrowDown" size={16} /> : <PixelIcon name="IconArrowRight" size={16} />} {Math.abs(topic.trend)}%
                                         </span>
                                     </div>
 
@@ -131,7 +132,7 @@ export default function Dashboard({ sessions, onBack }) {
                                                 topic.subtopics.map(sub => (
                                                     <div key={sub.subtopic} className="topic-table-row subtopic-row">
                                                         <span className="topic-name subtopic-name">
-                                                            ↳ {sub.subtopic}
+                                                            <PixelIcon name="IconCornerDownRight" size={16} /> {sub.subtopic}
                                                         </span>
                                                         <span>{sub.totalQuestions}</span>
                                                         <span className={sub.accuracy >= 60 ? 'text-success' : 'text-danger'}>
@@ -180,7 +181,7 @@ export default function Dashboard({ sessions, onBack }) {
 
             <div className="dashboard-actions">
                 <Button className="btn btn-secondary" onPress={onBack}>
-                    ← Back to Sessions
+                    <PixelIcon name="IconArrowLeft" size={20} /> Back to Sessions
                 </Button>
             </div>
         </div>

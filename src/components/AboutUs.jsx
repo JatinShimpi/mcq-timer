@@ -90,7 +90,7 @@ export default function AboutUs() {
         <div className="about-page">
             <nav className="landing-nav">
                 <div className="landing-nav-left">
-                    <img src="/icons/icon.svg" alt="Qlock" className="landing-nav-logo" />
+                    <img src="/icons/icon-readme.svg" alt="Qlock" className="landing-nav-logo" />
                     <span className="landing-nav-title">Qlock</span>
                 </div>
                 <div className="landing-nav-right">

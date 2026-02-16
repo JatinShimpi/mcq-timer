@@ -71,7 +71,7 @@ export default function Header({
     <header className="header">
       <div className="header-left">
         <h1 className="logo" onClick={onHomeClick}>
-          <img src="/icons/icon.svg" alt="Qlock" className="logo-icon" />
+          <img src="/icons/icon-readme.svg" alt="Qlock" className="logo-icon" />
           <span className="logo-text">Qlock</span>
         </h1>
       </div>

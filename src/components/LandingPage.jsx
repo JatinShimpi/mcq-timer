@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-aria-components';
+import PixelIcon from './PixelIcon';
 
 // Icons
 const GithubIcon = () => (
@@ -22,7 +23,7 @@ export default function LandingPage() {
             {/* Navbar - scrolls with page */}
             <nav className="landing-nav">
                 <div className="landing-nav-left">
-                    <img src="/icons/icon.svg" alt="Qlock" className="landing-nav-logo" />
+                    <img src="/icons/icon-readme.svg" alt="Qlock" className="landing-nav-logo" />
                     <span className="landing-nav-title">Qlock</span>
                 </div>
                 <div className="landing-nav-right">
@@ -70,62 +71,62 @@ export default function LandingPage() {
                 <h2 className="features-title">Why Qlock?</h2>
                 <div className="features-grid">
                     <div className="feature-card">
-                        <span className="feature-icon">⏱️</span>
+                        <span className="feature-icon"><PixelIcon name="IconClock" size={32} /></span>
                         <h3 className="feature-title">Timed Practice</h3>
                         <p className="feature-desc">Simulate exam conditions with customizable timers per question</p>
                     </div>
                     <div className="feature-card">
-                        <span className="feature-icon">📊</span>
+                        <span className="feature-icon"><PixelIcon name="IconChartBar" size={32} /></span>
                         <h3 className="feature-title">Track Progress</h3>
                         <p className="feature-desc">View detailed analytics and identify areas for improvement</p>
                     </div>
                     <div className="feature-card">
-                        <span className="feature-icon">🎯</span>
+                        <span className="feature-icon"><PixelIcon name="IconTarget" size={32} /></span>
                         <h3 className="feature-title">Multiple Question Types</h3>
                         <p className="feature-desc">MCQ, MSQ, and Numerical - just like GATE</p>
                     </div>
                     <div className="feature-card">
-                        <span className="feature-icon">☁️</span>
+                        <span className="feature-icon"><PixelIcon name="IconCloud" size={32} /></span>
                         <h3 className="feature-title">Cloud Sync</h3>
                         <p className="feature-desc">Sign in to sync your sessions across devices</p>
                     </div>
                     <div className="feature-card">
-                        <span className="feature-icon">📁</span>
+                        <span className="feature-icon"><PixelIcon name="IconFolder" size={32} /></span>
                         <h3 className="feature-title">Organize by Topic</h3>
                         <p className="feature-desc">Create sessions with topics and subtopics for better organization</p>
                     </div>
                     <div className="feature-card">
-                        <span className="feature-icon">🔄</span>
+                        <span className="feature-icon"><PixelIcon name="IconReload" size={32} /></span>
                         <h3 className="feature-title">Unlimited Retakes</h3>
                         <p className="feature-desc">Practice the same session multiple times and track improvement</p>
                     </div>
                     <div className="feature-card">
-                        <span className="feature-icon">⚡</span>
+                        <span className="feature-icon"><PixelIcon name="IconZap" size={32} /></span>
                         <h3 className="feature-title">Instant Feedback</h3>
                         <p className="feature-desc">Mark answers as correct, incorrect, or skipped in real-time</p>
                     </div>
                     <div className="feature-card">
-                        <span className="feature-icon">🌙</span>
+                        <span className="feature-icon"><PixelIcon name="IconMoon" size={32} /></span>
                         <h3 className="feature-title">Dark Mode</h3>
                         <p className="feature-desc">Easy on the eyes during late-night study sessions</p>
                     </div>
                     <div className="feature-card">
-                        <span className="feature-icon">📱</span>
+                        <span className="feature-icon"><PixelIcon name="IconDeviceMobile" size={32} /></span>
                         <h3 className="feature-title">Works Offline</h3>
                         <p className="feature-desc">Practice anywhere, even without internet connection</p>
                     </div>
                     <div className="feature-card">
-                        <span className="feature-icon">🎨</span>
+                        <span className="feature-icon"><PixelIcon name="IconArtboard" size={32} /></span>
                         <h3 className="feature-title">Clean Interface</h3>
                         <p className="feature-desc">Distraction-free design to keep you focused on practice</p>
                     </div>
                     <div className="feature-card">
-                        <span className="feature-icon">📈</span>
+                        <span className="feature-icon"><PixelIcon name="IconChartLine" size={32} /></span>
                         <h3 className="feature-title">Subtopic Drill-Down</h3>
                         <p className="feature-desc">Click topics in dashboard to see subtopic-level performance</p>
                     </div>
                     <div className="feature-card">
-                        <span className="feature-icon">🔍</span>
+                        <span className="feature-icon"><PixelIcon name="IconSearch" size={32} /></span>
                         <h3 className="feature-title">Smart Autocomplete</h3>
                         <p className="feature-desc">Quickly find topics and subtopics with search suggestions</p>
                     </div>

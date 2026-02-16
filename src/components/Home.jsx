@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from 'react-aria-components';
 import { SESSION_PATTERNS } from '../constants';
 import SessionCard from './SessionCard';
+import PixelIcon from './PixelIcon';
 
 // ============================================================================
 // HOME COMPONENT
@@ -19,43 +20,45 @@ export default function Home({ sessions, onCreateSession, onEditSession, onDelet
                         Practice time-critical MCQ questions • Press <kbd>N</kbd> for new session
                     </p>
                 </div>
-                <div className="home-actions">
-                    <Button className="btn btn-secondary btn-sm" onPress={onImport}>
-                        📥 Import
-                    </Button>
-                    <Button className="btn btn-secondary btn-sm" onPress={onExport} isDisabled={sessions.length === 0}>
-                        📤 Export
-                    </Button>
-                    {sessions.length > 0 && (
-                        <div className="dropdown">
-                            <Button className="btn btn-primary btn-lg" onPress={() => setShowTemplates(!showTemplates)}>
-                                + New Session
-                            </Button>
-                            {showTemplates && (
-                                <div className="dropdown-menu">
-                                    <button className="dropdown-item" onClick={() => { onCreateSession(); setShowTemplates(false); }}>
-                                        🆕 Blank Session
+            </div>
+            <div className="home-actions">
+                <Button className="btn btn-secondary btn-sm" onPress={onImport}>
+                    <PixelIcon name="IconDownload" size={20} /> Import
+                </Button>
+                <Button className="btn btn-secondary btn-sm" onPress={onExport} isDisabled={sessions.length === 0}>
+                    <PixelIcon name="IconUpload" size={20} /> Export
+                </Button>
+                {sessions.length > 0 && (
+                    <div className="dropdown">
+                        <Button className="btn btn-primary btn-sm" onPress={() => setShowTemplates(!showTemplates)}>
+                            + New Session
+                        </Button>
+                        {showTemplates && (
+                            <div className="dropdown-menu">
+                                <button className="dropdown-item" onClick={() => { onCreateSession(); setShowTemplates(false); }}>
+                                    <PixelIcon name="IconPlus" size={20} /> Blank Session
+                                </button>
+                                <div className="dropdown-divider"></div>
+                                {SESSION_PATTERNS.slice(1).map(template => (
+                                    <button
+                                        key={template.name}
+                                        className="dropdown-item"
+                                        onClick={() => { onCreateSession(template); setShowTemplates(false); }}
+                                    >
+                                        <PixelIcon name="IconClock" size={20} /> {template.name}
                                     </button>
-                                    <div className="dropdown-divider"></div>
-                                    {SESSION_PATTERNS.slice(1).map(template => (
-                                        <button
-                                            key={template.name}
-                                            className="dropdown-item"
-                                            onClick={() => { onCreateSession(template); setShowTemplates(false); }}
-                                        >
-                                            ⏱️ {template.name}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
 
             {sessions.length === 0 ? (
                 <div className="empty-state">
-                    <div className="empty-state-icon">📚</div>
+                    <div className="empty-state-icon">
+                        <PixelIcon name="IconBookOpen" size={64} />
+                    </div>
                     <h2 className="empty-state-title">No sessions yet</h2>
                     <p className="empty-state-text">Create your first session or import existing data</p>
                     <div style={{ display: 'flex', gap: 'var(--space-md)', justifyContent: 'center', flexWrap: 'wrap' }}>

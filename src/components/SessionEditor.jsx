@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button, TextField, Input, Label } from 'react-aria-components';
+import PixelIcon from './PixelIcon';
 import { toast } from 'sonner';
 import { QUESTION_TYPES, DEFAULT_OPTIONS } from '../constants';
 import { generateId } from '../utils/storage';
@@ -139,9 +140,9 @@ export default function SessionEditor({ session, onSave, onCancel, onStart, exis
                 <label className="form-label">Timer Mode</label>
                 <div className="tabs">
                     {[
-                        { value: 'uniform', label: '⏱️ Uniform', desc: 'Same time for all' },
-                        { value: 'individual', label: '⚙️ Individual', desc: 'Set per question' },
-                        { value: 'total', label: '⏳ Total', desc: 'Divide total time' }
+                        { value: 'uniform', label: <><PixelIcon name="IconClock" size={16} /> Uniform</>, desc: 'Same time for all' },
+                        { value: 'individual', label: <><PixelIcon name="IconSliders" size={16} /> Individual</>, desc: 'Set per question' },
+                        { value: 'total', label: <><PixelIcon name="IconHourglass" size={16} /> Total</>, desc: 'Divide total time' }
                     ].map(mode => (
                         <button
                             key={mode.value}
@@ -192,10 +193,10 @@ export default function SessionEditor({ session, onSave, onCancel, onStart, exis
                     <label className="form-label">Questions ({editSession.questions.length})</label>
                     <div className="question-list-actions">
                         <Button className="btn btn-secondary btn-sm" onPress={handleBulkAdd}>
-                            + Bulk Add
+                            <PixelIcon name="IconPlus" size={16} /> Bulk Add
                         </Button>
                         <Button className="btn btn-secondary btn-sm" onPress={handleAddQuestion}>
-                            + Add
+                            <PixelIcon name="IconPlus" size={16} /> Add
                         </Button>
                     </div>
                 </div>
@@ -210,7 +211,7 @@ export default function SessionEditor({ session, onSave, onCancel, onStart, exis
                             onDragOver={(e) => handleDragOver(e, index)}
                             onDragEnd={handleDragEnd}
                         >
-                            <span className="question-drag-handle">⋮⋮</span>
+                            <span className="question-drag-handle"><PixelIcon name="IconDragAndDrop" size={16} /></span>
                             <span className="question-number">{index + 1}</span>
                             <input
                                 type="text"
@@ -244,7 +245,7 @@ export default function SessionEditor({ session, onSave, onCancel, onStart, exis
                                 onPress={() => handleDeleteQuestion(question.id)}
                                 aria-label="Delete question"
                             >
-                                ✕
+                                <PixelIcon name="IconClose" size={16} />
                             </Button>
                         </div>
                     ))}
@@ -253,9 +254,9 @@ export default function SessionEditor({ session, onSave, onCancel, onStart, exis
 
             <div className="editor-actions">
                 <Button className="btn btn-ghost" onPress={onCancel}>Cancel</Button>
-                <Button className="btn btn-secondary" onPress={handleSave}>💾 Save</Button>
+                <Button className="btn btn-secondary" onPress={handleSave}><PixelIcon name="IconDeviceFloppy" size={20} /> Save</Button>
                 <Button className="btn btn-primary btn-lg" onPress={handleStartPractice}>
-                    🎯 Start Practice
+                    <PixelIcon name="IconGamepad" size={20} /> Start Practice
                 </Button>
             </div>
         </div>

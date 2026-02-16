@@ -1,4 +1,5 @@
 import { Button } from 'react-aria-components';
+import PixelIcon from './PixelIcon';
 
 // ============================================================================
 // SESSION CARD COMPONENT
@@ -24,18 +25,24 @@ export default function SessionCard({ session, onEdit, onDelete, onStart }) {
                     {session.subtopic && <p className="card-subtitle">{session.subtopic}</p>}
                 </div>
                 <div className="session-card-actions">
-                    <Button className="btn btn-ghost btn-sm" onPress={onDelete} aria-label="Delete">🗑️</Button>
+                    <Button className="btn btn-ghost btn-sm" onPress={onDelete} aria-label="Delete">
+                        <PixelIcon name="IconTrash" size={20} />
+                    </Button>
                     <Button className="btn btn-ghost btn-sm" onPress={onEdit}>Edit</Button>
                     <Button className="btn btn-primary btn-sm" onPress={onStart}>Start</Button>
                 </div>
             </div>
             <div className="session-card-meta">
-                <span className="session-card-meta-item">📝 {questionCount} questions</span>
-                <span className="session-card-meta-item">🎯 {attemptCount} attempts</span>
+                <span className="session-card-meta-item">
+                    <PixelIcon name="IconList" size={16} /> {questionCount} questions
+                </span>
+                <span className="session-card-meta-item">
+                    <PixelIcon name="IconTarget" size={16} /> {attemptCount} attempts
+                </span>
                 {lastAttempt && (
                     <>
                         <span className="session-card-meta-item">
-                            📅 {new Date(lastAttempt.date).toLocaleDateString()}
+                            <PixelIcon name="IconCalendar" size={16} /> {new Date(lastAttempt.date).toLocaleDateString()}
                         </span>
                         {lastAccuracy !== null && (
                             <span className={`session-card-meta-item ${lastAccuracy >= 60 ? 'text-success' : 'text-danger'}`}>

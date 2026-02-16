@@ -12,7 +12,7 @@ import { DEFAULT_OPTIONS } from './constants';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 // Import components
-import Header from './components/Header';
+import Sidebar from './components/Sidebar';
 import Home from './components/Home';
 import SessionEditor from './components/SessionEditor';
 import Practice from './components/Practice';
@@ -36,6 +36,7 @@ function MainApp() {
   const [currentSession, setCurrentSession] = useState(null);
   const [practiceState, setPracticeState] = useState(null);
   const [theme, setTheme] = useState(() => loadTheme());
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [hasSynced, setHasSynced] = useState(() => localStorage.getItem('qlock-synced') === 'true');
 
   // Handle sync after login and fetch on reload
@@ -306,17 +307,21 @@ function MainApp() {
 
   return (
     <div className="app">
-      <Header
-        onHomeClick={handleBackToHome}
-        onDashboardClick={() => setCurrentView('dashboard')}
-        onSignInClick={() => navigate('/signin')}
-        showBack={currentView !== 'home'}
-        theme={theme}
-        onToggleTheme={toggleTheme}
-        currentView={currentView}
-      />
+      {/* Hide sidebar during practice/review/results */}
+      {!['practice', 'review', 'results'].includes(currentView) && (
+        <Sidebar
+          onHomeClick={handleBackToHome}
+          onDashboardClick={() => setCurrentView('dashboard')}
+          onSignInClick={() => navigate('/signin')}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+          currentView={currentView}
+          isOpen={sidebarOpen}
+          onToggle={() => setSidebarOpen(!sidebarOpen)}
+        />
+      )}
 
-      <main className="main-content">
+      <main className={`main-content ${!['practice', 'review', 'results'].includes(currentView) ? 'with-sidebar' : ''}`}>
         {currentView === 'home' && (
           <Home
             sessions={sessions}

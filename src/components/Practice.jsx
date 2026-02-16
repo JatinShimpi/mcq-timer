@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from 'react-aria-components';
+import PixelIcon from './PixelIcon';
 import { toast } from 'sonner';
 import { DEFAULT_OPTIONS } from '../constants';
 import { playSound } from '../utils/sound';
@@ -282,7 +283,7 @@ export default function Practice({ practiceState, setPracticeState, onComplete, 
                     onPress={() => handleAction('done')}
                     isDisabled={isPaused}
                 >
-                    <span className="answer-btn-icon">✓</span>
+                    <span className="answer-btn-icon"><PixelIcon name="IconCheck" size={20} /></span>
                     <span>Done</span>
                     <kbd>Enter</kbd>
                 </Button>
@@ -291,7 +292,7 @@ export default function Practice({ practiceState, setPracticeState, onComplete, 
                     onPress={() => handleAction('skipped')}
                     isDisabled={isPaused}
                 >
-                    <span className="answer-btn-icon">⏭</span>
+                    <span className="answer-btn-icon"><PixelIcon name="IconForward" size={20} /></span>
                     <span>Skip</span>
                     <kbd>S</kbd>
                 </Button>
@@ -301,13 +302,13 @@ export default function Practice({ practiceState, setPracticeState, onComplete, 
                 >
                     {isPaused ? (
                         <>
-                            <span className="answer-btn-icon-resume">▶</span>
+                            <span className="answer-btn-icon-resume"><PixelIcon name="IconPlayerPlay" size={20} /></span>
                             <span>Resume</span>
                             <kbd>Space</kbd>
                         </>
                     ) : (
                         <>
-                            <span className="answer-btn-icon">⏸</span>
+                            <span className="answer-btn-icon"><PixelIcon name="IconPlayerPause" size={20} /></span>
                             <span>Pause</span>
                             <kbd>Space</kbd>
                         </>
