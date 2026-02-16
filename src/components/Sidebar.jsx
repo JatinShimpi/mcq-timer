@@ -168,8 +168,12 @@ export default function Sidebar({
                                         </div>
                                         <div className="user-dropdown-divider" />
                                         <button className="user-dropdown-item" onClick={handleLogout}>
-                                            <PixelIcon name="IconLogout" size={20} />
-                                            Sign out
+                                            <span className="user-dropdown-icon">
+                                                <PixelIcon name="IconLogout" size={20} />
+                                            </span>
+                                            <span className="user-dropdown-text">
+                                                Sign out
+                                            </span>
                                         </button>
                                     </div>
                                 </>

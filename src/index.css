@@ -353,6 +353,8 @@ body::before {
   margin: var(--space-xs) 0;
 }
 
+
+
 .user-dropdown-item {
   display: flex;
   align-items: center;
@@ -369,6 +371,22 @@ body::before {
   font-family: inherit;
   transition: background var(--transition-fast);
 }
+
+.user-dropdown-item svg {
+  display: block;
+}
+
+.user-dropdown-icon {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.user-dropdown-text {
+  flex: 0 0 auto;
+}
+
+
 
 .user-dropdown-item:hover {
   background: var(--bg-glass);
@@ -2496,68 +2514,6 @@ kbd {
   z-index: 99;
 }
 
-.user-dropdown {
-  position: absolute;
-  top: calc(100% + var(--space-sm));
-  right: 0;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  min-width: 220px;
-  box-shadow: var(--shadow-lg);
-  z-index: 100;
-  overflow: hidden;
-}
-
-.user-dropdown-header {
-  padding: var(--space-md);
-  background: var(--bg-glass);
-}
-
-.user-dropdown-name {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 2px;
-}
-
-.user-dropdown-email {
-  display: block;
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-  margin-bottom: var(--space-xs);
-}
-
-.user-dropdown-provider {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
-  font-size: var(--font-size-xs);
-  color: var(--text-muted);
-  text-transform: capitalize;
-}
-
-.user-dropdown-divider {
-  height: 1px;
-  background: var(--border-color);
-}
-
-.user-dropdown-item {
-  display: block;
-  width: 100%;
-  padding: var(--space-sm) var(--space-md);
-  background: none;
-  border: none;
-  text-align: left;
-  font-size: var(--font-size-sm);
-  color: var(--text-primary);
-  cursor: pointer;
-  transition: background var(--transition-fast);
-  font-family: inherit;
-}
-
-.user-dropdown-item:hover {
-  background: var(--bg-glass);
-}
 
 /* ============================================================================
    LANDING PAGE STYLES
