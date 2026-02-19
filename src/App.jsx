@@ -252,26 +252,49 @@ function MainApp() {
     setCurrentView('review');
   };
 
-  const handleSaveReviewResults = useCallback((finalResults) => {
+  const handleSaveReviewResults = useCallback(async (finalResults) => {
     const attempt = {
       id: generateId(),
       date: new Date().toISOString(),
       results: finalResults
     };
 
+    let updatedSession = null;
+
     setSessions(prev => prev.map(s => {
       if (s.id === practiceState.session.id) {
-        return {
+        updatedSession = {
           ...s,
           attempts: [...(s.attempts || []), attempt]
         };
+        return updatedSession;
       }
       return s;
     }));
 
     setPracticeState(prev => ({ ...prev, results: finalResults, completed: true }));
     setCurrentView('results');
-  }, [practiceState]);
+
+    // Sync session with new attempt to cloud
+    if (isAuthenticated && updatedSession) {
+      const sessionData = {
+        ...updatedSession,
+        client_id: updatedSession.id,
+        timer_mode: updatedSession.timerMode,
+        time_per_question: updatedSession.timePerQuestion,
+        total_time: updatedSession.totalTime,
+      };
+      const saved = await saveSession(sessionData);
+      if (saved) {
+        // Update with cloud ID if it was a new session
+        setSessions(prev => prev.map(s =>
+          s.id === updatedSession.id
+            ? { ...s, _id: saved.id }
+            : s
+        ));
+      }
+    }
+  }, [practiceState, isAuthenticated, saveSession]);
 
   const handleBackToHome = () => {
     setCurrentView('home');
