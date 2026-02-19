@@ -15,7 +15,7 @@ export default function AboutUs() {
         },
         {
             name: 'Rishikesh Astarkar',
-            role: 'User 0, Tester and Angel investor',
+            role: 'User 0, Tester and Angel Investor',
             description: 'I tested the features and provided feedback.',
             photo: null, // Placeholder - add actual photo path
             github: 'https://github.com/',

@@ -1,0 +1,11 @@
+/* Previous Gradient Background */
+/* This file contains the styling for the previous gradient background.
+   Use this class (or apply the background property) to elements as needed. */
+
+.previous-gradient {
+    background:
+        radial-gradient(circle at top left, rgba(67, 97, 238, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at bottom right, rgba(76, 201, 240, 0.08) 0%, transparent 40%),
+        radial-gradient(ellipse at top left, rgba(74, 111, 212, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom right, rgba(61, 92, 184, 0.04) 0%, transparent 50%);
+}

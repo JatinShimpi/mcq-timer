@@ -4,40 +4,20 @@ const API_URL = 'https://qlock-api-jatin123-53a75330.koyeb.app';
 
 const AuthContext = createContext(null);
 
-// Helper to get auth headers
-const getAuthHeaders = () => {
-    const token = localStorage.getItem('auth_token');
-    return token ? { 'Authorization': `Bearer ${token}` } : {};
-};
-
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    // Check auth status on mount
+    // Check auth status on mount (cookie is sent automatically)
     useEffect(() => {
-        // Check for token in URL (from OAuth callback)
-        const params = new URLSearchParams(window.location.search);
-        const token = params.get('token');
-        if (token) {
-            localStorage.setItem('auth_token', token);
-            window.history.replaceState({}, '', window.location.pathname);
-        }
-
         checkAuth();
     }, []);
 
     const checkAuth = async () => {
-        const token = localStorage.getItem('auth_token');
-        if (!token) {
-            setLoading(false);
-            return;
-        }
-
         try {
             const res = await fetch(`${API_URL}/api/auth/me`, {
-                headers: getAuthHeaders(),
+                credentials: 'include',
             });
 
             if (res.ok) {
@@ -45,8 +25,6 @@ export function AuthProvider({ children }) {
                 setUser(userData);
                 setIsAuthenticated(true);
             } else {
-                // Token invalid, clear it
-                localStorage.removeItem('auth_token');
                 setUser(null);
                 setIsAuthenticated(false);
             }
@@ -70,6 +48,7 @@ export function AuthProvider({ children }) {
         const res = await fetch(`${API_URL}/api/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
             body: JSON.stringify({ email, password }),
         });
 
@@ -79,9 +58,6 @@ export function AuthProvider({ children }) {
         }
 
         const data = await res.json();
-        if (data.token) {
-            localStorage.setItem('auth_token', data.token);
-        }
         setUser(data.user || data);
         setIsAuthenticated(true);
         return data;
@@ -91,6 +67,7 @@ export function AuthProvider({ children }) {
         const res = await fetch(`${API_URL}/api/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
             body: JSON.stringify({ name, email, password }),
         });
 
@@ -100,9 +77,6 @@ export function AuthProvider({ children }) {
         }
 
         const data = await res.json();
-        if (data.token) {
-            localStorage.setItem('auth_token', data.token);
-        }
         setUser(data.user || data);
         setIsAuthenticated(true);
         return data;
@@ -112,12 +86,11 @@ export function AuthProvider({ children }) {
         try {
             await fetch(`${API_URL}/api/auth/logout`, {
                 method: 'POST',
-                headers: getAuthHeaders(),
+                credentials: 'include',
             });
         } catch {
             // Ignore logout errors
         }
-        localStorage.removeItem('auth_token');
         setUser(null);
         setIsAuthenticated(false);
     };
@@ -129,10 +102,8 @@ export function AuthProvider({ children }) {
         try {
             const res = await fetch(`${API_URL}/api/sessions/sync`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...getAuthHeaders()
-                },
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify({ sessions: localSessions }),
             });
 
@@ -151,7 +122,7 @@ export function AuthProvider({ children }) {
 
         try {
             const res = await fetch(`${API_URL}/api/sessions`, {
-                headers: getAuthHeaders(),
+                credentials: 'include',
             });
 
             if (res.ok) {
@@ -175,10 +146,8 @@ export function AuthProvider({ children }) {
         try {
             const res = await fetch(url, {
                 method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...getAuthHeaders()
-                },
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify(session),
             });
 
@@ -198,7 +167,7 @@ export function AuthProvider({ children }) {
         try {
             const res = await fetch(`${API_URL}/api/sessions/${sessionId}`, {
                 method: 'DELETE',
-                headers: getAuthHeaders(),
+                credentials: 'include',
             });
 
             return res.ok;

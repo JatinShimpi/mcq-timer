@@ -3125,3 +3125,17 @@ kbd {
   color: var(--text-secondary);
   margin-bottom: var(--space-md);
 }
+
+/* Sonner Toast Overrides */
+[data-sonner-toast] [data-button] {
+  margin-left: 0 !important;
+  /* Reset auto margins so buttons don't spread apart */
+  height: 28px !important;
+  font-size: var(--font-size-xs) !important;
+  padding: 0 var(--space-sm) !important;
+}
+
+/* First button pushes group to the right */
+[data-sonner-toast] [data-button]:first-of-type {
+  margin-left: auto !important;
+}
