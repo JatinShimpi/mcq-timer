@@ -52,16 +52,8 @@ function MainApp() {
         console.log('Syncing local sessions to cloud...');
         const cloudSessions = await syncLocalSessions(sessions);
         if (cloudSessions && cloudSessions.length > 0) {
-          const mappedSessions = cloudSessions.map(s => ({
-            ...s,
-            id: s.client_id,
-            _id: s.id,
-            timerMode: s.timer_mode,
-            timePerQuestion: s.time_per_question,
-            totalTime: s.total_time,
-          }));
-          setSessions(mappedSessions);
-          saveSessions(mappedSessions);
+          setSessions(cloudSessions);
+          saveSessions(cloudSessions);
         }
         localStorage.setItem('qlock-synced', 'true');
         setHasSynced(true);
@@ -74,16 +66,8 @@ function MainApp() {
       console.log('Fetched sessions:', cloudSessions);
 
       if (cloudSessions && cloudSessions.length > 0) {
-        const mappedSessions = cloudSessions.map(s => ({
-          ...s,
-          id: s.client_id,
-          _id: s.id,
-          timerMode: s.timer_mode,
-          timePerQuestion: s.time_per_question,
-          totalTime: s.total_time,
-        }));
-        setSessions(mappedSessions);
-        saveSessions(mappedSessions);
+        setSessions(cloudSessions);
+        saveSessions(cloudSessions);
       }
 
       // Mark as synced
@@ -159,15 +143,6 @@ function MainApp() {
   };
 
   const handleSaveSession = async (session) => {
-    // Transform session data for backend (camelCase to snake_case)
-    const sessionData = {
-      ...session,
-      client_id: session.id,
-      timer_mode: session.timerMode,
-      time_per_question: session.timePerQuestion,
-      total_time: session.totalTime,
-    };
-
     // Update local state immediately for responsiveness
     setSessions(prev => {
       const exists = prev.find(s => s.id === session.id);
@@ -181,7 +156,7 @@ function MainApp() {
 
     // Sync to cloud if authenticated
     if (isAuthenticated) {
-      const savedSession = await saveSession(sessionData);
+      const savedSession = await saveSession(session);
       if (savedSession) {
         // Update with cloud ID for future updates
         setSessions(prev => prev.map(s =>
@@ -277,14 +252,7 @@ function MainApp() {
 
     // Sync session with new attempt to cloud
     if (isAuthenticated && updatedSession) {
-      const sessionData = {
-        ...updatedSession,
-        client_id: updatedSession.id,
-        timer_mode: updatedSession.timerMode,
-        time_per_question: updatedSession.timePerQuestion,
-        total_time: updatedSession.totalTime,
-      };
-      const saved = await saveSession(sessionData);
+      const saved = await saveSession(updatedSession);
       if (saved) {
         // Update with cloud ID if it was a new session
         setSessions(prev => prev.map(s =>
