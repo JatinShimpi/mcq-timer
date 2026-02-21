@@ -161,7 +161,7 @@ function MainApp() {
         // Update with cloud ID for future updates
         setSessions(prev => prev.map(s =>
           s.id === session.id
-            ? { ...s, _id: savedSession.id }
+            ? { ...s, _id: savedSession._id }
             : s
         ));
         toast.success('Session saved to cloud');
@@ -257,7 +257,7 @@ function MainApp() {
         // Update with cloud ID if it was a new session
         setSessions(prev => prev.map(s =>
           s.id === updatedSession.id
-            ? { ...s, _id: saved.id }
+            ? { ...s, _id: saved._id }
             : s
         ));
       }
